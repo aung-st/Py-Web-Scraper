@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 import requests 
-
+import pandas as pd
 
 HEADERS = ({'User-Agent': 
             'Mozilla/5.0 (Windows NT 10.0; Win64; x64) \
@@ -67,14 +67,18 @@ def showProductData(soup):
                 pass
             else:
                 print(line.strip())
-   
-url = "https://www.amazon.co.uk/MusicSafe-Pro-Black-Geh%C3%B6rschutz/dp/B07HHFVSPB/ref=sr_1_6?keywords=alpine+ear+plug&qid=1656601752&sprefix=alpine%2Caps%2C96&sr=8-6"
 
-soup = html_code(url)
 
-#print a list of names of all customers who left a review
-customer_name = getCustomerName(soup)
-#print(customer_name)
+if __name__ == "__main__":
+    url = "https://www.amazon.co.uk/MusicSafe-Pro-Black-Geh%C3%B6rschutz/dp/B07HHFVSPB/ref=sr_1_6?keywords=alpine+ear+plug&qid=1656601752&sprefix=alpine%2Caps%2C96&sr=8-6"
 
-#print(showCustomerReviews(soup))
-print(showProductData(soup))
+    soup = html_code(url)
+
+    customer_names = getCustomerName(soup)
+    customer_reviews = showCustomerReviews(soup)
+    
+    #Create dataframe and save as a csv
+    data = {'Name': customer_names,
+            'review': customer_reviews}
+    df = pd.DataFrame(data)    
+    df.to_csv('alpine_earplugs_amazon_reviews.csv')

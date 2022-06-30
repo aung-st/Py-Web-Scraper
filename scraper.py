@@ -38,7 +38,7 @@ def collectReviewData(soup):
     result = data_str.split("\n")
     return result
 
-def getCustomerReviews(soup):
+def showCustomerReviews(soup):
     customer_reviews = collectReviewData(soup)
     reviews = []
     for review in customer_reviews:
@@ -48,7 +48,26 @@ def getCustomerReviews(soup):
             reviews.append(review)
     return reviews
 
+def collectProductData(soup):
+    data_str = ""
+    product_info = []
 
+    for item in soup.find("table",id = "productDetails_techSpec_section_1" ):
+        data_str = data_str + item.get_text()
+        product_info.append(data_str.split("\n"))
+        data_str = ""
+    return product_info
+
+def showProductData(soup):
+    
+    data = collectProductData(soup)
+    for item in data:
+        for line in item:
+            if line == "":
+                pass
+            else:
+                print(line.strip())
+   
 url = "https://www.amazon.co.uk/MusicSafe-Pro-Black-Geh%C3%B6rschutz/dp/B07HHFVSPB/ref=sr_1_6?keywords=alpine+ear+plug&qid=1656601752&sprefix=alpine%2Caps%2C96&sr=8-6"
 
 soup = html_code(url)
@@ -57,4 +76,5 @@ soup = html_code(url)
 customer_name = getCustomerName(soup)
 #print(customer_name)
 
-print(getCustomerReviews(soup))
+#print(showCustomerReviews(soup))
+print(showProductData(soup))
